@@ -6,7 +6,7 @@ Inspect battle information from BN6.
 
 ### VBA-RR
 
-1. Build the bn6inspector Go binary and run it.
+1. Download the latest binary release from https://github.com/bigfarts/bn6inspector/releases (or just build it yourself.)
 
 1. Run `lua/bn6debug_vbarr.lua`.
 
@@ -14,7 +14,7 @@ Inspect battle information from BN6.
 
 ### BizHawk
 
-1. Build the bn6inspector Go binary and run it.
+1. Download the latest binary release from https://github.com/bigfarts/bn6inspector/releases (or just build it yourself.)
 
 1. In `lua/bn6debug_bizhawk.lua`, set `USE_INSPECTOR` to `true`.
 
