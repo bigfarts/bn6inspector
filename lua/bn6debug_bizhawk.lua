@@ -41,24 +41,24 @@ event.onframestart(function()
 end)
 
 function drawobjectsinfo(os, x, color)
-	local yoff = 0
-	for idx, obj in ipairs(os) do
-		if obj.flags ~= 0 then
-			local s = "%2d: (%d, %d) -> (%d, %d)\n    attack = %02d:%02d\n    anim   = %02d"
-			s = string.format(s, idx, obj.x, obj.y, obj.nextx, obj.nexty, obj.attack, obj.attackphase, obj.animation)
-			gui.pixelText(x, 2 + 32*yoff, s, color)
-			yoff = yoff + 1
-		end
-	end
+    local yoff = 0
+    for idx, obj in ipairs(os) do
+        if obj.flags ~= 0 then
+            local s = "%2d: (%d, %d) -> (%d, %d)\n    attack = %02d:%02d\n    anim   = %02d"
+            s = string.format(s, idx, obj.x, obj.y, obj.nextx, obj.nexty, obj.attack, obj.attackphase, obj.animation)
+            gui.pixelText(x, 2 + 32*yoff, s, color)
+            yoff = yoff + 1
+        end
+    end
 end
 
 function drawobjectsmarkers(os, x, color)
-	for idx, obj in ipairs(os) do
-		if obj.flags ~= 0 then
-			local s = string.format("%d", idx)
-			gui.pixelText(xpad+(obj.x-1)*40+40/2-#s*2+1, 72+(obj.y-1)*24+24/4+2, s, "white", color)
-		end
-	end
+    for idx, obj in ipairs(os) do
+        if obj.flags ~= 0 then
+            local s = string.format("%d", idx)
+            gui.pixelText(xpad+(obj.x-1)*40+40/2-#s*2+1, 72+(obj.y-1)*24+24/4+2, s, "white", color)
+        end
+    end
 end
 
 -- By default, this loop runs at the end of every frame.
@@ -66,7 +66,7 @@ end
 -- and any registered events created by the script will be removed.
 -- So it's standard to have a while loop like this.
 while true do
-	if objects ~= nil then
+    if objects ~= nil then
         if USE_INSPECTOR then
             bn6debug.sendtoinspector(objects)
         end
@@ -74,7 +74,7 @@ while true do
         drawobjectsinfo(objects[3], 2 + xend, blue)
         drawobjectsmarkers(objects[1], 2, red)
         drawobjectsmarkers(objects[3], 2 + xend, blue)
-	end
-	-- always run the frameadvance as the last line in the script's while loop
-	emu.frameadvance()
+    end
+    -- always run the frameadvance as the last line in the script's while loop
+    emu.frameadvance()
 end
