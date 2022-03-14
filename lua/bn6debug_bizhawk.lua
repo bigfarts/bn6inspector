@@ -40,6 +40,18 @@ event.onframestart(function()
     end
 end)
 
+function drawobjectsinfo(os, x, color)
+	local yoff = 0
+	for idx, obj in ipairs(os) do
+		if obj.flags ~= 0 then
+			local s = "%2d: (%d, %d) -> (%d, %d)\n    attack = %02d:%02d\n    anim   = %02d"
+			s = string.format(s, idx, obj.x, obj.y, obj.nextx, obj.nexty, obj.attack, obj.attackphase, obj.animation)
+			gui.pixelText(x, 2 + 32*yoff, s, color)
+			yoff = yoff + 1
+		end
+	end
+end
+
 function drawobjectsmarkers(os, x, color)
 	for idx, obj in ipairs(os) do
 		if obj.flags ~= 0 then
