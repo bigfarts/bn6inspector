@@ -48,9 +48,9 @@ function readobj(mops, objptr)
         hp           = mops.readu16(objptr + 0x24),
         maxhp        = mops.readu16(objptr + 0x26),
 
-        screenx = mops.readu16(objptr + 0x34),
-        screeny = mops.readu16(objptr + 0x38),
-        screenz = mops.readu16(objptr + 0x3c),
+        screenx = mops.readu32(objptr + 0x34),
+        screeny = mops.readu32(objptr + 0x38),
+        screenz = mops.readu32(objptr + 0x3c),
 
         parentptr = mops.readu32(objptr + 0x4c),
         childptr  = mops.readu32(objptr + 0x50),
