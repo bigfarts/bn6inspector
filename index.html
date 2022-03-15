@@ -315,7 +315,7 @@
                         const cbox = document.createElement("input");
                         label.appendChild(cbox);
                         cbox.type = "checkbox";
-                        cbox.readOnly = true;
+                        cbox.onclick = (e) => e.preventDefault();
                         cbox.checked = v;
                         label.appendChild(document.createTextNode(" " + k));
                         ul.appendChild(li);
