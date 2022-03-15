@@ -59,7 +59,7 @@ function readobj(mops, objptr)
     }
 end
 
-function unpackcollisionflags(flags)
+function unpackcollflags(flags)
     return {
         shielding       = bit.band(flags, 0x00000001) ~= 0,
         unk02           = bit.band(flags, 0x00000002) ~= 0,
@@ -97,7 +97,7 @@ function unpackcollisionflags(flags)
 end
 
 
-function unpackobjflags2(flags)
+function unpackcollflags2(flags)
     return {
         die             = bit.band(flags, 0x00000001) ~= 0,
         flash           = bit.band(flags, 0x00000002) ~= 0,

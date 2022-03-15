@@ -31,6 +31,80 @@
                 main.appendChild(formatObjects(data.objects));
             };
 
+            function unpackcollflags(flags) {
+                return {
+                    shielding: (flags & 0x00000001) != 0,
+                    unk02: (flags & 0x00000002) != 0,
+                    unk03: (flags & 0x00000004) != 0,
+                    invincible: (flags & 0x00000008) != 0,
+                    airshoes: (flags & 0x00000010) != 0,
+                    floatshoes: (flags & 0x00000020) != 0,
+                    cannotslide: (flags & 0x00000040) != 0,
+                    unk08: (flags & 0x00000080) != 0,
+                    dead: (flags & 0x00000100) != 0,
+                    flashing: (flags & 0x00000200) != 0,
+                    flinching: (flags & 0x00000400) != 0,
+                    paralyzed: (flags & 0x00000800) != 0,
+                    sliding: (flags & 0x00001000) != 0,
+                    blinded: (flags & 0x00002000) != 0,
+                    immobilized: (flags & 0x00004000) != 0,
+                    confused: (flags & 0x00008000) != 0,
+                    frozen: (flags & 0x00010000) != 0,
+                    superarmor: (flags & 0x00020000) != 0,
+                    undershirt: (flags & 0x00040000) != 0,
+                    movedone: (flags & 0x00080000) != 0,
+                    dragged: (flags & 0x00100000) != 0,
+                    angry: (flags & 0x00200000) != 0,
+                    usingaction: (flags & 0x00400000) != 0,
+                    unk24: (flags & 0x00800000) != 0,
+                    unk25: (flags & 0x01000000) != 0,
+                    respectsice: (flags & 0x02000000) != 0,
+                    ignorespoison: (flags & 0x04000000) != 0,
+                    unk28: (flags & 0x08000000) != 0,
+                    unk29: (flags & 0x10000000) != 0,
+                    unk30: (flags & 0x20000000) != 0,
+                    unk31: (flags & 0x40000000) != 0,
+                    bubbled: (flags & 0x80000000) != 0,
+                };
+            }
+
+            function unpackcollflags2(flags) {
+                return {
+                    die: (flags & 0x00000001) != 0,
+                    flash: (flags & 0x00000002) != 0,
+                    flinch: (flags & 0x00000004) != 0,
+                    paralyze: (flags & 0x00000008) != 0,
+                    slide: (flags & 0x00000010) != 0,
+                    blind: (flags & 0x00000020) != 0,
+                    immobilize: (flags & 0x00000040) != 0,
+                    confuse: (flags & 0x00000080) != 0,
+                    drag: (flags & 0x00000100) != 0,
+                    anger: (flags & 0x00000200) != 0,
+                    unk11: (flags & 0x00000400) != 0,
+                    unk12: (flags & 0x00000800) != 0,
+                    unk13: (flags & 0x00001000) != 0,
+                    unk14: (flags & 0x00002000) != 0,
+                    unk15: (flags & 0x00004000) != 0,
+                    unk16: (flags & 0x00008000) != 0,
+                    freeze: (flags & 0x00010000) != 0,
+                    bubble: (flags & 0x00020000) != 0,
+                    unk19: (flags & 0x00040000) != 0,
+                    unk20: (flags & 0x00080000) != 0,
+                    unk21: (flags & 0x00100000) != 0,
+                    unk22: (flags & 0x00200000) != 0,
+                    unk23: (flags & 0x00400000) != 0,
+                    unk24: (flags & 0x00800000) != 0,
+                    unk25: (flags & 0x01000000) != 0,
+                    unk26: (flags & 0x02000000) != 0,
+                    unk27: (flags & 0x04000000) != 0,
+                    unk28: (flags & 0x08000000) != 0,
+                    unk29: (flags & 0x10000000) != 0,
+                    unk30: (flags & 0x20000000) != 0,
+                    unk31: (flags & 0x40000000) != 0,
+                    unk32: (flags & 0x80000000) != 0,
+                };
+            }
+
             function formatObjects(data) {
                 const container = document.createElement("div");
                 container.className = "row";
@@ -227,9 +301,25 @@
                     th.textContent = "flags";
                     const td = document.createElement("td");
                     tr.appendChild(td);
-                    td.textContent = `${collision.flags
-                        .toString(16)
-                        .padStart(8, "0")}`;
+
+                    const ul = document.createElement("ul");
+                    ul.className = "list-unstyled";
+                    td.appendChild(ul);
+
+                    const flags = unpackcollflags(collision.flags);
+                    for (const k in flags) {
+                        const v = flags[k];
+                        const li = document.createElement("li");
+                        const label = document.createElement("label");
+                        li.appendChild(label);
+                        const cbox = document.createElement("input");
+                        label.appendChild(cbox);
+                        cbox.type = "checkbox";
+                        cbox.readOnly = true;
+                        cbox.checked = v;
+                        label.appendChild(document.createTextNode(" " + k));
+                        ul.appendChild(li);
+                    }
                 }
 
                 {
