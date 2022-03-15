@@ -19,8 +19,8 @@ Inspect battle information from BN6.
 1. Download the latest binary release from https://github.com/bigfarts/bn6inspector/releases (or just build it yourself.)
 
 1. Start `bn6inspector`. It should indicate it's listening on http://localhost:9999.
-2. 
-3. In `lua/bn6debug_bizhawk.lua`, set `USE_INSPECTOR` to `true`.
+
+1. In `lua/bn6debug_bizhawk.lua`, set `USE_INSPECTOR` to `true`.
 
 1. Run `lua/bn6debug_bizhawk.lua`.
 
