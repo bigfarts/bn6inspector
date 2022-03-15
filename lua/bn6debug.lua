@@ -62,7 +62,7 @@ end
 function unpackcollflags(flags)
     return {
         shielding       = bit.band(flags, 0x00000001) ~= 0,
-        unk02           = bit.band(flags, 0x00000002) ~= 0,
+        invis           = bit.band(flags, 0x00000002) ~= 0,
         unk03           = bit.band(flags, 0x00000004) ~= 0,
         invincible      = bit.band(flags, 0x00000008) ~= 0,
         airshoes        = bit.band(flags, 0x00000010) ~= 0,

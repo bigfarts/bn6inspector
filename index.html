@@ -34,7 +34,7 @@
             function unpackcollflags(flags) {
                 return {
                     shielding: (flags & 0x00000001) != 0,
-                    unk02: (flags & 0x00000002) != 0,
+                    invis: (flags & 0x00000002) != 0,
                     unk03: (flags & 0x00000004) != 0,
                     invincible: (flags & 0x00000008) != 0,
                     airshoes: (flags & 0x00000010) != 0,
