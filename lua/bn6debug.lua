@@ -88,7 +88,7 @@ function unpackcollflags(flags)
         unk25           = bit.band(flags, 0x01000000) ~= 0,
         respectsice     = bit.band(flags, 0x02000000) ~= 0,
         ignorespoison   = bit.band(flags, 0x04000000) ~= 0,
-        unk28           = bit.band(flags, 0x08000000) ~= 0,
+        beastover       = bit.band(flags, 0x08000000) ~= 0,
         unk29           = bit.band(flags, 0x10000000) ~= 0,
         unk30           = bit.band(flags, 0x20000000) ~= 0,
         unk31           = bit.band(flags, 0x40000000) ~= 0,
