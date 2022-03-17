@@ -11,16 +11,16 @@ function unpackobjhdrflags(flags)
     }
 end
 
-function readobjandcollisions(mops, objptr)
-    local obj = readobj(mops, objptr)
+function dumpobjandcollisions(mops, objptr)
+    local obj = dumpobj(mops, objptr)
     obj.collision = nil
     if obj.collisionptr ~= 0 then
-        obj.collision = readcollision(mops, obj.collisionptr)
+        obj.collision = dumpcollision(mops, obj.collisionptr)
     end
     return obj
 end
 
-function readobj(mops, objptr)
+function dumpobj(mops, objptr)
     return {
         flags        = mops.readu8(objptr + 0x00),
         objid        = mops.readu8(objptr + 0x01),
@@ -134,7 +134,7 @@ function unpackcollflags2(flags)
     }
 end
 
-function readcollision(mops, collisionptr)
+function dumpcollision(mops, collisionptr)
     return {
         enabled = mops.readu8(collisionptr + 0x00),
         region = mops.readu8(collisionptr + 0x01),
@@ -157,7 +157,7 @@ function readcollision(mops, collisionptr)
     }
 end
 
-function readtile(mops, tileptr)
+function dumptile(mops, tileptr)
     return {
         visible         = mops.readu8(tileptr + 0x00),
         type            = mops.readu8(tileptr + 0x02),
@@ -167,6 +167,7 @@ function readtile(mops, tileptr)
         y               = mops.readu8(tileptr + 0x0b),
         timeleft        = mops.readu16(tileptr + 0x0e),
         flags           = mops.readu32(tileptr + 0x14),
+        reserver        = mops.readu32(tileptr + 0x1c),
     }
 end
 
@@ -198,7 +199,7 @@ end
 local tileoffset = 0x02039AE0
 local tilesize = 0x20
 
-function dumpobjectdata(mops)
+function dumpobjects(mops)
     local objects = {[1] = {}, [2] = {}, [3] = {}, [4] = {}, [5] = {}}
     for objtype, _  in ipairs(objects) do
         local objspec = getobjtypespec(mops, objtype)
@@ -206,11 +207,28 @@ function dumpobjectdata(mops)
         if objspec.startptr ~= 0 then
             for offset = objspec.startptr+0x10, objspec.endptr, objspec.size do
                 local idx = (offset - objspec.startptr - 0x10) / objspec.size
-                os[idx + 1] = readobjandcollisions(mops, offset)
+                local oc = dumpobjandcollisions(mops, offset)
+                oc._addr = offset
+                os[idx + 1] = oc
             end
         end
     end
     return objects
+end
+
+function dumptiles(mops)
+    local tiles = {}
+    for i=0,(5*8)-1 do
+        tiles[i+1] = dumptile(mops, tileoffset + i * tilesize)
+    end
+    return tiles
+end
+
+function dumpinfo(mops)
+    return {
+        objects = dumpobjects(mops),
+        tiles = dumptiles(mops),
+    }
 end
 
 function inbattle(mops)
@@ -219,15 +237,15 @@ end
 
 -- tile ownership by column: 0x2034016 + 0x8 * colidx
 
-function sendtoinspector(objects)
+function sendtoinspector(info)
     local inspectoraddr = "http://localhost:9999/_data"
     local http = require("socket.http")
     local json = require("json")
-    http.request(inspectoraddr, json.encode({objects = objects}))
+    http.request(inspectoraddr, json.encode(info))
 end
 
 return {
     inbattle = inbattle,
-    dumpobjectdata = dumpobjectdata,
+    dumpinfo = dumpinfo,
     sendtoinspector = sendtoinspector,
 }

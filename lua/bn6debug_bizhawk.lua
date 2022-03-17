@@ -31,12 +31,12 @@ MOPS = {
     reads32 = memory.read_s32_le
 }
 
-local objects = nil
+local info = nil
 event.onframestart(function()
     if bn6debug.inbattle(MOPS) ~= 0 then
-        objects = bn6debug.dumpobjectdata(MOPS)
+        info = bn6debug.dumpinfo(MOPS)
     else
-        objects = nil
+        info = nil
     end
 end)
 
@@ -66,14 +66,14 @@ end
 -- and any registered events created by the script will be removed.
 -- So it's standard to have a while loop like this.
 while true do
-    if objects ~= nil then
+    if info ~= nil then
         if USE_INSPECTOR then
-            bn6debug.sendtoinspector(objects)
+            bn6debug.sendtoinspector(info)
         end
-        drawobjectsinfo(objects[1], 2, red)
-        drawobjectsinfo(objects[3], 2 + xend, blue)
-        drawobjectsmarkers(objects[1], 2, red)
-        drawobjectsmarkers(objects[3], 2 + xend, blue)
+        drawobjectsinfo(info.objects[1], 2, red)
+        drawobjectsinfo(info.objects[3], 2 + xend, blue)
+        drawobjectsmarkers(info.objects[1], 2, red)
+        drawobjectsmarkers(info.objects[3], 2 + xend, blue)
     end
     -- always run the frameadvance as the last line in the script's while loop
     emu.frameadvance()

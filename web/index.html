@@ -24,11 +24,11 @@
             document.getElementById("main");
             const source = new EventSource("/_data");
             source.onmessage = (e) => {
-                const data = JSON.parse(e.data);
+                const info = JSON.parse(e.data);
                 while (main.firstChild != null) {
                     main.removeChild(main.firstChild);
                 }
-                main.appendChild(formatObjects(data.objects));
+                main.appendChild(formatInfo(info));
             };
 
             function unpackcollflags(flags) {
@@ -105,12 +105,132 @@
                 };
             }
 
-            function formatObjects(data) {
+            function formatInfo(info) {
+                const container = document.createElement("div");
+                container.appendChild(formatTiles(info.tiles));
+                container.appendChild(formatObjects(info.objects));
+                return container;
+            }
+
+            function formatTiles(tiles) {
+                const container = document.createElement("div");
+
+                const heading = document.createElement("h3");
+                heading.textContent = "tiles";
+                container.appendChild(heading);
+
+                const table = document.createElement("table");
+                container.appendChild(table);
+
+                table.className = "table table-borderless";
+                table.style.borderCollapse = "separate";
+                table.style.borderSpacing = "1px";
+
+                for (let j = 0; j < 5; ++j) {
+                    const tr = document.createElement("tr");
+                    table.appendChild(tr);
+
+                    for (let i = 0; i < 8; ++i) {
+                        const td = document.createElement("td");
+
+                        const tile = tiles[j * 8 + i];
+
+                        td.style.borderColor = tile.visible
+                            ? !tile.owner
+                                ? "red"
+                                : "blue"
+                            : "black";
+                        td.style.borderWidth = "5px";
+                        td.style.borderStyle = "solid";
+
+                        td.appendChild(formatTile(tile));
+
+                        tr.appendChild(td);
+                    }
+                }
+                return container;
+            }
+
+            function formatTile(tile) {
+                const container = document.createElement("table");
+                container.className = "table table-sm table-bordered";
+
+                const tbody = document.createElement("tbody");
+                container.appendChild(tbody);
+
+                {
+                    const tr = document.createElement("tr");
+                    tbody.appendChild(tr);
+                    const th = document.createElement("th");
+                    tr.appendChild(th);
+                    th.style.width = "100px";
+                    th.textContent = "type";
+                    const td = document.createElement("td");
+                    tr.appendChild(td);
+                    td.textContent = `${tile.type}`;
+                }
+
+                {
+                    const tr = document.createElement("tr");
+                    tbody.appendChild(tr);
+                    const th = document.createElement("th");
+                    tr.appendChild(th);
+                    th.style.width = "100px";
+                    th.textContent = "anim";
+                    const td = document.createElement("td");
+                    tr.appendChild(td);
+                    td.textContent = `${tile.animation}`;
+                }
+
+                {
+                    const tr = document.createElement("tr");
+                    tbody.appendChild(tr);
+                    const th = document.createElement("th");
+                    tr.appendChild(th);
+                    th.style.width = "100px";
+                    th.textContent = "time";
+                    const td = document.createElement("td");
+                    tr.appendChild(td);
+                    td.textContent = `${tile.timeleft}`;
+                }
+
+                {
+                    const tr = document.createElement("tr");
+                    tbody.appendChild(tr);
+                    const th = document.createElement("th");
+                    tr.appendChild(th);
+                    th.style.width = "100px";
+                    th.textContent = "flags";
+                    const td = document.createElement("td");
+                    tr.appendChild(td);
+                    td.textContent = `${tile.flags
+                        .toString(16)
+                        .padStart(8, "0")}`;
+                }
+
+                {
+                    const tr = document.createElement("tr");
+                    tbody.appendChild(tr);
+                    const th = document.createElement("th");
+                    tr.appendChild(th);
+                    th.style.width = "100px";
+                    th.textContent = "res";
+                    const td = document.createElement("td");
+                    tr.appendChild(td);
+                    td.textContent = `0x${tile.reserver
+                        .toString(16)
+                        .padStart(8, "0")}`;
+                }
+
+                return container;
+            }
+
+            function formatObjects(objects) {
                 const container = document.createElement("div");
                 container.className = "row";
-                container.appendChild(formatTypedObjects(0, data[0]));
-                container.appendChild(formatTypedObjects(2, data[2]));
-                container.appendChild(formatTypedObjects(3, data[3]));
+                container.appendChild(formatTypedObjects(0, objects[0]));
+                container.appendChild(formatTypedObjects(2, objects[2]));
+                container.appendChild(formatTypedObjects(3, objects[3]));
                 return container;
             }
 
@@ -145,7 +265,9 @@
                     tbody.appendChild(tr);
                     const th = document.createElement("th");
                     tr.appendChild(th);
-                    th.textContent = `${j + 1}`;
+                    th.textContent = `${j + 1} @ 0x${object._addr
+                        .toString(16)
+                        .padStart(8, "0")}`;
                     th.style.color = "white";
                     th.style.backgroundColor = COLORS[i];
                     th.colSpan = 2;

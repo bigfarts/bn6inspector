@@ -15,12 +15,12 @@ MOPS = {
     reads32 = memory.readlong,
 }
 
-local objects = nil
+local info = nil
 vba.registerbefore(function()
     if bn6debug.inbattle(MOPS) ~= 0 then
-        objects = bn6debug.dumpobjectdata(MOPS)
+        info = bn6debug.dumpinfo(MOPS)
     else
-        objects = nil
+        info = nil
     end
 end)
 
@@ -34,9 +34,9 @@ function drawobjectsmarkers(os, x, color)
 end
 
 gui.register(function()
-    if objects ~= nil then
-        bn6debug.sendtoinspector(objects)
-        drawobjectsmarkers(objects[1], 2, 0xff0000ff)
-        drawobjectsmarkers(objects[3], 2 + 120, 0x0000ffff)
+    if info ~= nil then
+        bn6debug.sendtoinspector(info)
+        drawobjectsmarkers(info.objects[1], 2, 0xff0000ff)
+        drawobjectsmarkers(info.objects[3], 2 + 120, 0x0000ffff)
     end
 end)

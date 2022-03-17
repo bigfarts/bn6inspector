@@ -14,9 +14,6 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-//go:embed index.html
-var indexHTML []byte
-
 var (
 	listenAddr = flag.String("listen_addr", "[::]:9999", "address to listen on")
 )
@@ -37,9 +34,7 @@ func main() {
 	clients := map[*http.Request]*client{}
 
 	mux := http.NewServeMux()
-	mux.Handle("/", http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		rw.Write(indexHTML)
-	}))
+	mux.Handle("/", http.FileServer(http.Dir("web")))
 	mux.Handle("/_data", http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
