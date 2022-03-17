@@ -114,10 +114,8 @@
 
             function formatTiles(tiles) {
                 const container = document.createElement("div");
-
-                const heading = document.createElement("h3");
-                heading.textContent = "tiles";
-                container.appendChild(heading);
+                container.id = "tiles";
+                container.className = "row";
 
                 const table = document.createElement("table");
                 container.appendChild(table);
@@ -133,7 +131,8 @@
                     for (let i = 0; i < 8; ++i) {
                         const td = document.createElement("td");
 
-                        const tile = tiles[j * 8 + i];
+                        const idx = j * 8 + i;
+                        const tile = tiles[idx];
 
                         td.style.borderColor = tile.visible
                             ? !tile.owner
@@ -143,7 +142,7 @@
                         td.style.borderWidth = "5px";
                         td.style.borderStyle = "solid";
 
-                        td.appendChild(formatTile(tile));
+                        td.appendChild(formatTile(idx, tile));
 
                         tr.appendChild(td);
                     }
@@ -151,13 +150,23 @@
                 return container;
             }
 
-            function formatTile(tile) {
+            function formatTile(i, tile) {
                 const container = document.createElement("table");
                 container.className = "table table-sm table-bordered";
 
                 const tbody = document.createElement("tbody");
                 container.appendChild(tbody);
 
+                {
+                    const tr = document.createElement("tr");
+                    tbody.appendChild(tr);
+                    const th = document.createElement("th");
+                    tr.appendChild(th);
+                    th.textContent = `0x${(0x02039ae0 + i * 0x20)
+                        .toString(16)
+                        .padStart(8, "0")}`;
+                    th.colSpan = 2;
+                }
                 {
                     const tr = document.createElement("tr");
                     tbody.appendChild(tr);
@@ -227,6 +236,7 @@
 
             function formatObjects(objects) {
                 const container = document.createElement("div");
+                container.id = "objects";
                 container.className = "row";
                 container.appendChild(formatTypedObjects(0, objects[0]));
                 container.appendChild(formatTypedObjects(2, objects[2]));
