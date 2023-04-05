@@ -19,6 +19,7 @@ local info = nil
 vba.registerbefore(function()
     if bn6debug.inbattle(MOPS) ~= 0 then
         info = bn6debug.dumpinfo(MOPS)
+        bn6debug.sendtoinspector(info)
     else
         info = nil
     end
@@ -35,7 +36,6 @@ end
 
 gui.register(function()
     if info ~= nil then
-        bn6debug.sendtoinspector(info)
         drawobjectsmarkers(info.objects[1], 2, 0xff0000ff)
         drawobjectsmarkers(info.objects[3], 2 + 120, 0x0000ffff)
     end

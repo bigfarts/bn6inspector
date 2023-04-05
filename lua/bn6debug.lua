@@ -51,6 +51,9 @@ function dumpobj(mops, objptr)
         screenx = mops.readu32(objptr + 0x34),
         screeny = mops.readu32(objptr + 0x38),
         screenz = mops.readu32(objptr + 0x3c),
+        screenxvel = mops.readu32(objptr + 0x40),
+        screenyvel = mops.readu32(objptr + 0x44),
+        screenzvel = mops.readu32(objptr + 0x48),
 
         parentptr = mops.readu32(objptr + 0x4c),
         childptr  = mops.readu32(objptr + 0x50),
